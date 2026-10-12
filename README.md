@@ -65,3 +65,8 @@ app.js      … GitHub API取得 + Three.js都市生成 (ES Module)
 - `MAX_FILES` … 表示上限
 - `heightForSize()` … 高さ式
 - `DISTRICT_ACCENTS` … 地区カラー
+
+## 🤖 AIについて
+
+このリポジトリのコード（`index.html` / `style.css` / `app.js` / `README.md`）は、AIコーディングアシスタント（OpenCode + Muse Spark）との対話を通じて生成されました。
+バグ報告や改善案はIssue・PRで歓迎します。
