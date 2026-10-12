@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CodeCity 3D — GitHubリポジトリを3D都市に</title>
+<meta name="description" content="GitHubのURLを貼るだけでソースコードを3Dの街として可視化。JavaScriptのみ・GitHub Pages対応。" />
+<link rel="stylesheet" href="./style.css" />
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app">
+  <canvas id="scene"></canvas>
+
+  <!-- ヘッダー -->
+  <header class="panel top-bar">
+    <div class="logo">🏙️ CodeCity <span>3D</span></div>
+    <div class="search-box">
+      <input id="repoInput" type="text" spellcheck="false"
+        placeholder="https://github.com/owner/repo を貼ってね" />
+      <button id="loadBtn">🚀 3D化</button>
+    </div>
+    <div class="top-actions">
+      <button id="rotateBtn" class="ghost on" title="自動回転">🔁</button>
+      <button id="helpBtn" class="ghost" title="使い方">？</button>
+    </div>
+  </header>
+
+  <!-- サンプル -->
+  <div class="panel samples">
+    <span class="samples-label">試してみる:</span>
+    <button data-repo="threejs/three">three.js</button>
+    <button data-repo="vuejs/core">vue</button>
+    <button data-repo="microsoft/vscode">vscode</button>
+    <button data-repo="godotengine/godot">godot</button>
+    <button data-repo="facebook/react">react</button>
+  </div>
+
+  <!-- ステータス -->
+  <div id="status" class="panel status hidden"></div>
+
+  <!-- 統計 -->
+  <div id="stats" class="panel stats hidden">
+    <div><b id="stFiles">0</b><small>ファイル</small></div>
+    <div><b id="stDistricts">0</b><small>地区</small></div>
+    <div><b id="stSize">0</b><small>合計サイズ</small></div>
+    <div><b id="stRepo">-</b><small>リポジトリ</small></div>
+  </div>
+
+  <!-- 凡例 -->
+  <div class="panel legend">
+    <div class="legend-title">拡張子カラー</div>
+    <div id="legendItems"></div>
+    <div class="legend-hint">高さ = ファイルサイズ (log)</div>
+  </div>
+
+  <!-- コントロール -->
+  <div class="panel controls">
+    <label>🔍 検索 <input id="filterInput" type="text" placeholder="例: src / .ts / .md" /></label>
+    <label>📏 高さ <input id="heightRange" type="range" min="0.3" max="2.5" step="0.1" value="1" /></label>
+  </div>
+
+  <!-- ファイル詳細 -->
+  <aside id="detail" class="panel detail hidden">
+    <button id="detailClose">✕</button>
+    <div class="detail-ext" id="dExt">js</div>
+    <h2 id="dPath">path/to/file</h2>
+    <p id="dMeta">-</p>
+    <div class="detail-btns">
+      <a id="dLink" href="#" target="_blank" rel="noopener">GitHubで開く ↗</a>
+      <button id="dCode3d">🧬 コードを立体化</button>
+    </div>
+  </aside>
+
+  <!-- コード立体ビュー -->
+  <aside id="codeView" class="panel codeview hidden">
+    <button id="codeBack">← 都市に戻る</button>
+    <div class="detail-ext" id="cExt">js</div>
+    <h2 id="cPath">path/to/file</h2>
+    <p id="cMeta">-</p>
+    <pre id="cCode"><code>読み込み中...</code></pre>
+    <p class="note">1行 = 1ブロック。長さ = 行の長さ / 色 = 構文の種類。ドラッグで回転できます。</p>
+    <a id="cLink" href="#" target="_blank" rel="noopener">GitHubで開く ↗</a>
+  </aside>
+
+  <!-- ツールチップ -->
+  <div id="tooltip" class="hidden"></div>
+
+  <!-- ヘルプ -->
+  <div id="help" class="panel help hidden">
+    <h3>使い方</h3>
+    <ol>
+      <li>GitHubリポジトリのURLを貼って「3D化」</li>
+      <li>ドラッグで回転 / ホイールでズーム / 右ドラッグで移動</li>
+      <li>ビルをクリック →「🧬 コードを立体化」で中身が3Dタワーに！</li>
+      <li>地区 = 先頭フォルダ / 高さ = ファイルサイズ / 色 = 拡張子</li>
+    </ol>
+    <p class="note">公開API利用のため1時間あたり約60回まで。大きいリポジトリは上位2500ファイルに絞られます。</p>
+    <button id="helpClose">閉じる</button>
+  </div>
+
+  <div id="loader" class="loader hidden"><div class="spin"></div><p id="loaderText">読み込み中...</p></div>
+</div>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
